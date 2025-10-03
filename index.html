@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>buat nanaaaa</title>
+  <style>
+    body {
+      margin: 0;
+      background: #181c2b;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .star {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #fffbe7;
+      border-radius: 50%;
+      box-shadow: 0 0 8px 2px #fffbe7, 0 0 2px 1px #fff;
+      opacity: 0.8;
+      animation: fall linear forwards;
+      overflow: visible;
+    }
+    .star::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 2px;
+      height: 36px;
+      background: linear-gradient(180deg, #fffbe7cc 0%, transparent 100%);
+      transform: translate(-50%, -10%) rotate(8deg);
+      opacity: 0.7;
+      pointer-events: none;
+      animation: tail-fade 1.8s linear forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-20px) scale(1) rotate(0deg); opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(100vh) scale(0.7) rotate(360deg); opacity: 0; }
+    }
+    @keyframes tail-fade {
+      0% { opacity: 0.7; height: 36px; }
+      80% { opacity: 0.7; }
+      100% { opacity: 0; height: 0; }
+    }
+    .balloons {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .balloon {
+      position: absolute;
+      width: 38px;
+      height: 52px;
+      z-index: 3;
+      animation: flyBalloon linear forwards;
+    }
+    .balloon .string {
+      position: absolute;
+      left: 50%;
+      top: 48px;
+      width: 2px;
+      height: 32px;
+      background: #aaa;
+      border-radius: 1px;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .balloon .body {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 38px;
+      height: 48px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 80% 80%;
+      z-index: 3;
+      box-shadow: 0 2px 8px #0002;
+    }
+    .balloon .shine {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      width: 8px;
+      height: 16px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 50%;
+      z-index: 4;
+      transform: rotate(-18deg);
+    }
+    @keyframes flyBalloon {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) scale(1) rotate(var(--angle, 0deg));
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+        transform: translateY(-10vh) scale(1) rotate(var(--angle, 0deg));
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) scale(1) rotate(var(--angle, 0deg));
+      }
+    }
+    .cake-container {
+      position: relative;
+      width: 260px;
+      height: 370px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .cake-text {
+      width: 100%;
+      text-align: center;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 1.6em;
+      color: #fff;
+      text-shadow: 1px 1px 8px #1e5fae, 0 0 8px #000;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+      margin-top: 0;
+      position: static;
+    }
+    .cake-plate {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 46px;
+      background: #e6e6fa;
+      border-radius: 50%;
+      border: 4px solid #b3b3cc;
+      box-shadow: 0 8px 24px #0003;
+      z-index: 0;
+    }
+    .cake-layer {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50% / 40%;
+      box-shadow: 0 4px 16px #1e5fae33;
+      border: none;
+      overflow: visible;
+    }
+    .cake-layer.bottom {
+      bottom: 10px;
+      width: 200px;
+      height: 90px;
+      background: linear-gradient(180deg, #5ecbff 80%, #1e5fae 100%);
+      z-index: 2;
+    }
+    .cake-layer.middle {
+      bottom: 60px;
+      width: 170px;
+      height: 74px;
+      background: linear-gradient(180deg, #7ed6ff 80%, #3b7edc 100%);
+      z-index: 3;
+    }
+    .cake-layer.top {
+      bottom: 107px;
+      width: 130px;
+      height: 50px;
+      background: linear-gradient(180deg, #b3eaff 80%, #5ecbff 100%);
+      z-index: 4;
+    }
+    .cake-cream {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 134px;
+      width: 120px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50% 50% 40% 40% / 70% 70% 40% 40%;
+      z-index: 5;
+      box-shadow: 0 2px 8px #fff8;
+      border: 2px solid #e0e0e0;
+    }
+    .candle {
+      position: absolute;
+      width: 10px;
+      height: 39px;
+      border-radius: 6px;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      border: 2px solid #eee;
+      box-shadow: 0 2px 4px #2222;
+      bottom: 150px;
+    }
+    .candle.c1 { left: 98px; background: #6ec6ff; }
+    .candle.c2 { left: 122px; background: #ffe066; }
+    .candle.c3 { left: 144px; background: #baffc9; }
+    .candle.c4 { left: 106px; background: #ffb2d7; }
+    .candle.c5 { left: 138px; background: #ffb266; }
+    .flame {
+      position: absolute;
+      top: -16px;
+      left: 1px;
+      width: 8px;
+      height: 16px;
+      background: radial-gradient(ellipse at center, #fff700 60%, #ff9900 100%);
+      border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+      opacity: 0.85;
+      animation: flicker 0.5s infinite alternate;
+      filter: blur(0.5px);
+    }
+    @keyframes flicker {
+      0% { transform: scaleY(1) scaleX(1); opacity: 0.8; }
+      50% { transform: scaleY(1.2) scaleX(0.9); opacity: 1; }
+      100% { transform: scaleY(0.9) scaleX(1.1); opacity: 0.7; }
+    }
+    .cake-shadow {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 30px;
+      background: radial-gradient(ellipse at center, #0008 60%, transparent 100%);
+      border-radius: 50%;
+      z-index: 1;
+      opacity: 0.5;
+    }
+    .cinnamoroll {
+      position: absolute;
+      left: 100%;
+      top: 60%;
+      transform: translate(-30px, -50%);
+      z-index: 20;
+      max-width: 120px;
+      pointer-events: none;
+      user-select: none;
+    }
+    .envelope-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 48px;
+      height: 36px;
+      background: #fff;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #0004;
+      cursor: pointer;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.2s;
+    }
+    .envelope-btn:hover {
+      box-shadow: 0 4px 16px #1e5fae88;
+    }
+    .envelope-icon {
+      width: 32px;
+      height: 24px;
+      position: relative;
+      display: block;
+    }
+    .envelope-icon .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 12px;
+      background: #e0e0e0;
+      border-radius: 4px 4px 0 0;
+      z-index: 2;
+    }
+    .envelope-icon .body {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 32px;
+      height: 16px;
+      background: #fff;
+      border-radius: 0 0 4px 4px;
+      border: 1.5px solid #b3b3cc;
+      z-index: 1;
+    }
+    .envelope-icon .line1, .envelope-icon .line2 {
+      position: absolute;
+      height: 2px;
+      background: #b3b3cc;
+      border-radius: 1px;
+      z-index: 3;
+    }
+    .envelope-icon .line1 {
+      width: 18px;
+      left: 7px;
+      top: 14px;
+      transform: rotate(-20deg);
+    }
+    .envelope-icon .line2 {
+      width: 18px;
+      left: 7px;
+      top: 14px;
+      transform: rotate(20deg);
+    }
+    .letter-popup-bg {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      align-items: center;
+      justify-content: center;
+    }
+    .letter-popup-bg.active {
+      display: flex;
+    }
+    .letter-popup {
+      background: #fff;
+      border-radius: 18px;
+      padding: 32px 24px;
+      box-shadow: 0 8px 32px #0005;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 1.1em;
+      color: #222;
+      max-width: 90vw;
+      max-height: 70vh;
+      overflow-y: auto;
+      position: relative;
+      animation: popupIn 0.3s;
+    }
+    @keyframes popupIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .close-letter {
+      position: absolute;
+      top: 10px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      color: #9cadff;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .close-letter:hover {
+      color: #3225f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="balloons"></div>
+  <div class="cake-container">
+    <div class="cake-text">生日おめでとう!</div>
+    <div class="cake-layer bottom"></div>
+    <div class="cake-layer middle"></div>
+    <div class="cake-layer top"></div>
+    <div class="cake-cream"></div>
+    <div class="candle c1"><div class="flame"></div></div>
+    <div class="candle c2"><div class="flame"></div></div>
+    <div class="candle c3"><div class="flame"></div></div>
+    <div class="cake-plate"></div>
+    <div class="cake-shadow"></div>
+    <!-- Cinnamoroll SVG -->
+    <div class="cinnamoroll">
+      <svg viewBox="0 0 160 90" width="120" height="69" style="display:block">
+        <!-- Ears -->
+        <ellipse cx="25" cy="25" rx="32" ry="14" fill="#fff" stroke="#b3eaff" stroke-width="2"/>
+        <ellipse cx="135" cy="25" rx="32" ry="14" fill="#fff" stroke="#b3eaff" stroke-width="2"/>
+        <!-- Head -->
+        <ellipse cx="80" cy="40" rx="34" ry="28" fill="#fff" stroke="#b3eaff" stroke-width="2"/>
+        <!-- Cheeks -->
+        <ellipse cx="60" cy="48" rx="6" ry="3" fill="#ffe6f7"/>
+        <ellipse cx="100" cy="48" rx="6" ry="3" fill="#ffe6f7"/>
+        <!-- Eyes -->
+        <ellipse cx="67" cy="40" rx="4" ry="6" fill="#7ed6ff" stroke="#3b7edc" stroke-width="1"/>
+        <ellipse cx="93" cy="40" rx="4" ry="6" fill="#7ed6ff" stroke="#3b7edc" stroke-width="1"/>
+        <!-- Smile -->
+        <path d="M74 52 Q80 58 86 52" stroke="#f7b2d9" stroke-width="2" fill="none" />
+        <!-- Nose -->
+        <ellipse cx="80" cy="48" rx="2.5" ry="1.5" fill="#f7b2d9"/>
+      </svg>
+    </div>
+  </div>
+  <button class="envelope-btn" id="envelopeBtn" title="Open Letter">
+    <span class="envelope-icon">
+      <span class="flap"></span>
+      <span class="body"></span>
+      <span class="line1"></span>
+      <span class="line2"></span>
+    </span>
+  </button>
+  <div class="letter-popup-bg" id="letterPopup">
+    <div class="letter-popup">
+      <button class="close-letter" onclick="closeLetter()">&times;</button>
+      <div>
+        お誕生日おめでとう! sayangkuuuu🤭🌹<br>
+        maaf yaa neng cmn bisa kasih ini😔.<br>
+        mas sehat sehat terus yahhh, semoga apa yg mas impikan tercapai,<br>
+        neng selalu sayang sama mas ehekkk🤭.<br>
+        oiya, mas jgn ovt mulu donggg:(
+      </div>
+    </div>
+  </div>
+  <script>
+    // Bintang jatuh berekor
+    function createStar() {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 6 + 4;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`;
+      star.style.opacity = Math.random() * 0.5 + 0.5;
+      document.querySelector('.stars').appendChild(star);
+      setTimeout(() => star.remove(), 2000);
+    }
+    setInterval(createStar, 180);
+
+    // Balon warna-warni & bentuk random
+    const balloonColors = [
+      "#ff7675", "#74b9ff", "#ffe066", "#55efc4", "#fd79a8", "#a29bfe", "#fab1a0", "#00b894"
+    ];
+    const balloonShapes = [
+      {rx: 19, ry: 24},
+      {rx: 20, ry: 20},
+      {rx: 16, ry: 28},
+      {heart: true}
+    ];
+    function createBalloon() {
+      const balloons = document.querySelector('.balloons');
+      const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+      const shape = balloonShapes[Math.floor(Math.random() * balloonShapes.length)];
+      const left = Math.random() * 90 + 2;
+      const duration = Math.random() * 2 + 5;
+      const angle = (Math.random() - 0.5) * 30;
+
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = left + 'vw';
+      balloon.style.animationDuration = duration + 's';
+      balloon.style.setProperty('--angle', angle + 'deg');
+
+      let svg;
+      if (shape.heart) {
+        svg = `
+          <svg width="38" height="48" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:0;top:0;">
+            <path d="M19 44 Q10 36 6 28 Q-2 14 12 10 Q19 12 19 20 Q19 12 26 10 Q40 14 32 28 Q28 36 19 44Z"
+              fill="${color}" stroke="#8884" stroke-width="1"/>
+          </svg>
+        `;
+      } else {
+        svg = `
+          <svg width="38" height="48" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:0;top:0;">
+            <ellipse cx="19" cy="24" rx="${shape.rx}" ry="${shape.ry}" fill="${color}" stroke="#8884" stroke-width="1"/>
+          </svg>
+        `;
+      }
+
+      balloon.innerHTML = `
+        <div class="body">${svg}<div class="shine"></div></div>
+        <div class="string"></div>
+      `;
+      balloons.appendChild(balloon);
+      setTimeout(() => balloon.remove(), duration * 1000 + 1000);
+    }
+    setInterval(createBalloon, 900);
+
+    // Amplop & surat
+    const envelopeBtn = document.getElementById('envelopeBtn');
+    const letterPopup = document.getElementById('letterPopup');
+    envelopeBtn.onclick = () => {
+      letterPopup.classList.add('active');
+    };
+    function closeLetter() {
+      letterPopup.classList.remove('active');
+    }
+    letterPopup.addEventListener('click', function(e) {
+      if (e.target === letterPopup) closeLetter();
+    });
+  </script>
+</body>
+</html>
